@@ -34,16 +34,35 @@ def addCombo():
     """
     This function creates a new combo to add to the combos list, and asks for confirmation.
     """
-    name = easygui.enterbox(
-        "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (1/3) - Combo Manager", "Name:")
+    while True:
+        try:
+            name = easygui.multenterbox(
+                "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (1/3) - Combo Manager", ["Name:"])[0]
+            if name == "":
+                easygui.msgbox(
+                    "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
+            else:
+                break
+        except:
+            easygui.msgbox(
+                "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
     items = {}
     while True:
-        nextitem = easygui.multenterbox(
-            f"Please enter item {len(items)+1} in the combo '{name}' and press OK, or press Cancel if you have entered all the items already:\n(You will be able to review the combo before adding.)", "New Combo (2/3) - Combo Manager", ["Item Name:", "Item Price: $"])
+        nextitem = ["", 0]
+        while True:
+            nextitem = easygui.multenterbox(
+                f"Please enter item {len(items)+1} in the combo '{name}' and press OK, or press Cancel if you have entered all the items already:\n(You will be able to review the combo before adding.)", "New Combo (2/3) - Combo Manager", ["Item Name:", "Item Price: $"], [(nextitem[0] if nextitem != None else ""), (nextitem[1] if nextitem != None else "")])
+            try:
+                if (nextitem == None):
+                    break
+                else:
+                    items[nextitem[0]] = float(nextitem[1])
+                    break
+            except:
+                easygui.msgbox("Error: prices must be numbers.",
+                               "New Combo - Combo Manager")
         if (nextitem == None):
             break
-        else:
-            items.append({nextitem[0], nextitem[1]})
     formatteditems = ""
     for item in items:
         formatteditems += f"- {item} (${items[item]})\n"
@@ -65,7 +84,7 @@ while True:
         "Welcome to Combo Manager!\n\nWhat would you like to do?", "Main Menu - Combo Manager", options)
     if (option == options[0]):
         # Add a combo to the list.
-        pass
+        addCombo()
     elif (option == options[1]):
         # View all combos.
         pass
