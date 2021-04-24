@@ -132,6 +132,31 @@ def viewAllCombos(combos):
     easygui.msgbox(output, "All Combos - Combo Manager", "Back to Menu")
 
 
+def chooseCombo(combos, message):
+    """This function will display a list of combo names and allows the user to select one for use.
+
+    Args:
+        combos (List[Combo]): A list of combos to choose from.
+        message (String): A message to display in the selection window.
+
+    Returns:
+        Integer: The index of the item chosen in the combos list.
+    """
+    names = []
+    for combo in combos:
+        # Get a list of the names
+        names.append(combo.name)
+    # Once a selection has been made, return the ID
+    selection = easygui.choicebox(
+        message, "Choose a Combo - Combo Manager", names)
+    if selection == None:
+        # They pressed Cancel
+        return None
+    else:
+        # They chose one
+        return names.index(selection)
+
+
 # MAIN MENU
 while True:
     # List of options:
@@ -146,7 +171,12 @@ while True:
         viewAllCombos(combos)
     elif (option == options[2]):
         # Edit a combo.
-        pass
+        choice = chooseCombo(combos, "Please select a combo to edit:")
+        if (choice == None):
+            # They pressed Cancel.
+            pass
+        else:
+            editCombo(combos, choice)
     elif (option == options[3]):
         # Delete a combo.
         pass
