@@ -35,43 +35,58 @@ def addCombo():
     This function creates a new combo to add to the combos list, and asks for confirmation.
     """
     while True:
+        # Error checking loop
         try:
             name = easygui.multenterbox(
                 "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (1/3) - Combo Manager", ["Name:"])[0]
             if name == "":
+                # If result is empty:
                 easygui.msgbox(
                     "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
             else:
+                # If OK, break loop and continue
                 break
         except:
+            # If any other error:
             easygui.msgbox(
                 "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
     items = {}
     while True:
+        # Loop while more items to add
         nextitem = ["", 0]
         while True:
+            # Error checking loop
             nextitem = easygui.multenterbox(
                 f"Please enter item {len(items)+1} in the combo '{name}' and press OK, or press Cancel if you have entered all the items already:\n(You will be able to review the combo before adding.)", "New Combo (2/3) - Combo Manager", ["Item Name:", "Item Price: $"], [(nextitem[0] if nextitem != None else ""), (nextitem[1] if nextitem != None else "")])
             try:
                 if (nextitem == None):
+                    # If cancelled, break (no more items)
                     break
                 else:
+                    # If OK, store & continue to next item
                     items[nextitem[0]] = float(nextitem[1])
                     break
             except:
+                # If error (normally NaN), alert & try again
                 easygui.msgbox("Error: prices must be numbers.",
                                "New Combo - Combo Manager")
         if (nextitem == None):
+            # If cancelled, break (no more items)
             break
     formatteditems = ""
     for item in items:
+        # Generate a displayable version of the combo about to be added
         formatteditems += f"- {item} (${items[item]})\n"
+    # Generate the combo
     newcombo = Combo(name, items)
+    # Ask for confirmation
     if (easygui.ynbox(f"Add this combo?\n\nName: {name}\nItems:{formatteditems}")):
+        # Yes, add
         combos.append(newcombo)
         easygui.msgbox(f"The combo '{name} was added.",
                        "New Combo - Combo Manager", "Back to Menu")
     else:
+        # No, do not add
         easygui.msgbox(f"The combo '{name}' was not added.",
                        "New Combo - Combo Manager", "Back to Menu")
 
