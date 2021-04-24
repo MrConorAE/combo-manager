@@ -25,9 +25,32 @@ class Combo:
 
 
 # This array contains all the combos as Combo objects (defined above).
-combos = []
+combos = [
+    Combo("Value", {"Beef burger": 5.69, "Fries": 1.00, "Fizzy drink": 1.00}),
+    Combo("Cheezy", {"Cheeseburger": 6.69,
+          "Fries": 1.00, "Fizzy drink": 1.00}),
+    Combo("Super", {"Cheeseburger": 6.69,
+          "Large fries": 2.00, "Smoothie": 2.00})
+]
 
 # FUNCTIONS
+
+
+def displayCombo(combo):
+    """This function formats a combo into a human-readable string for display.
+
+    Args:
+        combo (Combo): The combo to display.
+
+    Returns:
+        String: The formatted string containing the combo details. Contains 2 leading newlines, for when displaying in a list.
+    """
+    output = ""
+    output += f"\n\nName: {combo.name}\nItems:"
+    for item in combo.items:
+        # The ":.2f" ensures that the price is displayed properly.
+        output += f"\n- {item} - ${combo.items[item]:.2f}"
+    return output
 
 
 def addCombo():
@@ -91,6 +114,24 @@ def addCombo():
                        "New Combo - Combo Manager", "Back to Menu")
 
 
+def viewAllCombos(combos):
+    """This function displays all the saved combos in a message box.
+
+    Args:
+        combos (List[Combo])): A list containing Combo objects of which to display.
+    """
+    output = ""
+    if (len(combos) == 0):
+        # If length of list is 0, print a placeholder message
+        output = "There are no combos to display."
+    else:
+        # Otherwise, iterate over all combos, generating a string for each
+        for combo in combos:
+            output += displayCombo(combo)
+    # Display output
+    easygui.msgbox(output, "All Combos - Combo Manager", "Back to Menu")
+
+
 # MAIN MENU
 while True:
     # List of options:
@@ -102,7 +143,7 @@ while True:
         addCombo()
     elif (option == options[1]):
         # View all combos.
-        pass
+        viewAllCombos(combos)
     elif (option == options[2]):
         # Edit a combo.
         pass
