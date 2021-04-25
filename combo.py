@@ -96,17 +96,13 @@ def addCombo():
         if (nextitem == None):
             # If cancelled, break (no more items)
             break
-    formatteditems = ""
-    for item in items:
-        # Generate a displayable version of the combo about to be added
-        formatteditems += f"- {item} (${items[item]})\n"
     # Generate the combo
     newcombo = Combo(name, items)
     # Ask for confirmation
-    if (easygui.ynbox(f"Add this combo?\n\nName: {name}\nItems:{formatteditems}")):
+    if (easygui.ynbox(f"Add this combo?{displayCombo(newcombo)}")):
         # Yes, add
         combos.append(newcombo)
-        easygui.msgbox(f"The combo '{name} was added.",
+        easygui.msgbox(f"The combo '{name}' was added successfully..",
                        "New Combo - Combo Manager", "Back to Menu")
     else:
         # No, do not add
