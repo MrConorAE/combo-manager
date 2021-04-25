@@ -61,11 +61,14 @@ def addCombo():
         # Error checking loop
         try:
             name = easygui.multenterbox(
-                "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (1/3) - Combo Manager", ["Name:"])[0]
+                "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (Step 1/3) - Combo Manager", ["Name:"])[0]
             if name == "":
                 # If result is empty:
                 easygui.msgbox(
                     "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
+            elif name == None:
+                # Cancelled, exit.
+                return
             else:
                 # If OK, break loop and continue
                 break
@@ -80,10 +83,21 @@ def addCombo():
         while True:
             # Error checking loop
             nextitem = easygui.multenterbox(
-                f"Please enter item {len(items)+1} in the combo '{name}' and press OK, or press Cancel if you have entered all the items already:\n(You will be able to review the combo before adding.)", "New Combo (2/3) - Combo Manager", ["Item Name:", "Item Price: $"], [(nextitem[0] if nextitem != None else ""), (nextitem[1] if nextitem != None else "")])
+                f"Please enter item {len(items)+1} in the combo '{name}' and press OK, or press Cancel if you have entered all the items already:\n(You will be able to review the combo before adding.)", "New Combo (Step 2/3) - Combo Manager", ["Item Name:", "Item Price: $"], [(nextitem[0] if nextitem != None else ""), (nextitem[1] if nextitem != None else "")])
             try:
                 if (nextitem == None):
                     # If cancelled, break (no more items)
+                    break
+                elif (nextitem[0] == ""):
+                    # No item name.
+                    easygui.msgbox("Skipping item with no name.",
+                                   "New Combo - Combo Manager", "Continue")
+                    break
+                elif (nextitem[1] == "" or float(nextitem[1]) == 0):
+                    # No item name.
+                    easygui.msgbox("No price given, defaulting to 0.",
+                                   "New Combo - Combo Manager", "Continue")
+                    items[nextitem[0]] = 0
                     break
                 else:
                     # If OK, store & continue to next item
@@ -99,10 +113,10 @@ def addCombo():
     # Generate the combo
     newcombo = Combo(name, items)
     # Ask for confirmation
-    if (easygui.ynbox(f"Add this combo?{displayCombo(newcombo)}")):
+    if (easygui.ynbox(f"Add this combo?{displayCombo(newcombo)}", "New Combo (Step 3/3) - Combo Manager")):
         # Yes, add
         combos.append(newcombo)
-        easygui.msgbox(f"The combo '{name}' was added successfully..",
+        easygui.msgbox(f"The combo '{name}' was added successfully.",
                        "New Combo - Combo Manager", "Back to Menu")
     else:
         # No, do not add
