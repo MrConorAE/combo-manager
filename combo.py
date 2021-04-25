@@ -219,6 +219,16 @@ def editCombo(combos, pos):
                     pass
 
 
+def deleteCombo(combos, pos):
+    if (easygui.ynbox(f"Are you sure you want to delete the combo '{combos[pos].name}'?\nThe combo will be permanently deleted. This cannot be undone.", "Delete Combo - Combo Manager", ["No, do not delete", "Yes, delete"]) == 0):
+        combos.pop(pos)
+        easygui.msgbox("The combo was deleted successfully.",
+                       "Delete Combo - Combo Manager", "Back to Menu")
+    else:
+        easygui.msgbox("The combo was not deleted.",
+                       "Delete Combo - Combo Manager", "Back to Menu")
+
+
 # MAIN MENU
 while True:
     # List of options:
@@ -241,7 +251,12 @@ while True:
             editCombo(combos, choice)
     elif (option == options[3]):
         # Delete a combo.
-        pass
+        choice = chooseCombo(combos, "Please select a combo to delete:")
+        if (choice == None):
+            # They pressed Cancel.
+            pass
+        else:
+            deleteCombo(combos, choice)
     elif (option == options[4]):
         # Quit.
         if (easygui.ynbox("Are you sure you want to quit Combo Manager?", "Quit - Combo Manager", ["No, do not quit", "Yes, quit"]) == 0):
