@@ -157,6 +157,68 @@ def chooseCombo(combos, message):
         return names.index(selection)
 
 
+def editCombo(combos, pos):
+    """This function allows the user to edit an existing combo.
+
+    Args:
+        combos (List[Combo]): The list of combos.
+        pos (Index): The index of the combo to edit in the list 'combos'.
+    """
+    # Get the combo to edit, and make a new blank one to store the results in
+    oldcombo = combos[pos]
+    newcombo = Combo(None, {})
+    # fields & values are lists of the keys & values for every attribute of the combo
+    # in format (combo name, item name, item price, item name, item price, ...)
+    # It's used for defining the titles & initial values in a multenterbox for editing
+    values = [oldcombo.name]
+    fields = ["Combo Name:"]
+    for index, item in enumerate(oldcombo.items):
+        values.append(item)
+        fields.append(f"Item {index+1} Name:")
+        values.append(oldcombo.items[item])
+        fields.append(f"Item {index+1} Price: $")
+    # Now display the editing box:
+    while True:
+        result = easygui.multenterbox(
+            f"Editing combo '{oldcombo.name}'.\nEnter the new data and press OK to save. Press Cancel to add another item.\n(You will be able to review the edited combo before saving it.)", "Edit Combo - Combo Manager", fields, values)
+        if (result == None):
+            # Cancel pressed - add another set of fields.
+            values.append("")
+            fields.append(f"Item {len(fields)+1} Name:")
+            values.append(0)
+            fields.append(f"Item {len(fields)+1} Price: $")
+        else:
+            # We have changes!
+            # First, get the name.
+            newcombo.name = result[0]
+            result.pop(0)
+            # Now, iterate over every second item returned and save it.
+            # It's every SECOND because the values are name/value pairs.
+            for index in range(0, len(result), 2):
+                newcombo.items[result[index]] = float(result[index+1])
+            # Now allow the user to compare and decide to commit the changes.
+            if (easygui.ynbox(f"Commit the changes to this combo? \n\n BEFORE =========={displayCombo(oldcombo)} \n\n AFTER =========={displayCombo(newcombo)}")):
+                # Save changes!
+                # First, remove the old combo.
+                combos.pop(pos)
+                # Now, reinsert the new one where the old one was.
+                combos.insert(pos, newcombo)
+                # Notify the user.
+                easygui.msgbox(
+                    f"Your changes to combo '{oldcombo.name}' were saved successfully.", "Edit Combo - Combo Manager", "Back to Menu")
+                break
+            else:
+                # If they don't like the changes, ask for what to do next:
+                if (easygui.buttonbox("Would you like to modify your changes, or abort editing altogether?", "Edit Combo - Combo Manager", ["Modify my changes", "Abort editing and discard changes"]) == "Abort editing and discard changes"):
+                    # Abort editing: drop changes and go back to menu.
+                    easygui.msgbox(
+                        f"Editing cancelled. Your changes to combo '{oldcombo.name}' were not saved.", "Edit Combo - Combo Manager", "Back to Menu")
+                    break
+                else:
+                    # Back to editing!
+                    pass
+
+
 # MAIN MENU
 while True:
     # List of options:
