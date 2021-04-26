@@ -47,9 +47,12 @@ def displayCombo(combo):
     """
     output = ""
     output += f"\n\nName: {combo.name}\nItems:"
+    total = 0
     for item in combo.items:
         # The ":.2f" ensures that the price is displayed properly.
         output += f"\n- {item} - ${combo.items[item]:.2f}"
+        total += combo.items[item]
+    output += f"\nTotal: ${total}"
     return output
 
 
