@@ -155,7 +155,13 @@ def viewAllCombos(combos):
         for combo in combos:
             output += displayCombo(combo)
     # Display output
-    easygui.msgbox(output, "All Combos - Combo Manager", "Back to Menu")
+    while True:
+        if (easygui.buttonbox(output, "All Combos - Combo Manager", ["Back to Menu", "Print to Shell"]) == "Print to Shell"):
+            print(output)
+            easygui.msgbox("The combos menu has been printed to the Python Shell.",
+                           "All Combos - Combo Manager", "OK")
+        else:
+            return
 
 
 def chooseCombo(combos, message):
