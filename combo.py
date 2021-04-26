@@ -135,6 +135,7 @@ def viewAllCombos(combos):
         # If length of list is 0, print a placeholder message
         output = "There are no combos to display."
     else:
+        output = f"There are {len(combos)} combos saved."
         # Otherwise, iterate over all combos, generating a string for each
         for combo in combos:
             output += displayCombo(combo)
