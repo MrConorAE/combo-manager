@@ -263,7 +263,9 @@ def deleteCombo(combos, pos):
         easygui.msgbox("The combo was not deleted.",
                        "Delete Combo - Combo Manager", "Back to Menu")
 
-
+# Print program information
+print("COMBO MANAGER")
+print("Copyright (c) Conor Eager, 2021. All rights reserved.")
 # MAIN MENU
 while True:
     # List of options:
