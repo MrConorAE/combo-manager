@@ -110,18 +110,33 @@ def addCombo():
         if (nextitem == None):
             # If cancelled, break (no more items)
             break
-    # Generate the combo
-    newcombo = Combo(name, items)
-    # Ask for confirmation
-    if (easygui.ynbox(f"Add this combo?{displayCombo(newcombo)}", "New Combo (Step 3/3) - Combo Manager")):
-        # Yes, add
-        combos.append(newcombo)
-        easygui.msgbox(f"The combo '{name}' was added successfully.",
-                       "New Combo - Combo Manager", "Back to Menu")
-    else:
-        # No, do not add
-        easygui.msgbox(f"The combo '{name}' was not added.",
-                       "New Combo - Combo Manager", "Back to Menu")
+    while True:
+        # "Save this combo?" loop
+        # If they say No > Edit, this allows them to come back and edit multiple times
+        # Generate the combo
+        newcombo = Combo(name, items)
+        # Ask for confirmation
+        if (easygui.ynbox(f"Add this combo?{displayCombo(newcombo)}", "New Combo (Step 3/3) - Combo Manager")):
+            # Yes, add
+            combos.append(newcombo)
+            easygui.msgbox(f"The combo '{name}' was added successfully.",
+                           "New Combo - Combo Manager", "Back to Menu")
+            return
+        else:
+            # No, do not add
+            if (easygui.buttonbox("Would you like to modify the combo, or abort creating altogether?", "New Combo - Combo Manager", ["Modify combo", "Abort creating and discard changes"]) == "Abort creating and discard changes"):
+                # Abort editing: drop changes and go back to menu.
+                easygui.msgbox(
+                    f"Creation cancelled. The combo '{newcombo.name}' was not added.", "New Combo - Combo Manager", "Back to Menu")
+                return
+            else:
+                # Back to editing.
+                # Instead of getting them to retype everything, we can actually temporarily add the combo to a placeholder list then immediately call editCombo on it to pull up an editing interface.
+                # Then, when they exit editCombo, ask if they want to save the edited version or drop it entirely.
+                temporary = [newcombo]
+                editCombo(temporary, 0)
+                # Re-save the edited version, and loop to ask again.
+                newcombo = temporary[0]
 
 
 def viewAllCombos(combos):
