@@ -63,7 +63,7 @@ def displayCombo(combo):
         # The ":.2f" ensures that the price is displayed properly.
         output += f"\n- {item} - ${combo.items[item]:.2f}"
         total += combo.items[item]
-    output += f"\nTotal: ${total}"
+    output += f"\nTotal: ${total:.2f}"
     return output
 
 
@@ -138,7 +138,7 @@ def addCombo():
             return
         else:
             # No, do not add
-            if (easygui.buttonbox("Would you like to modify the combo, or abort creating altogether?", "New Combo - Combo Manager", ["Modify combo", "Abort creating and discard changes"]) == "Abort creating and discard changes"):
+            if (easygui.buttonbox("Would you like to modify the combo, or abort creating altogether?", "New Combo - Combo Manager", ["Modify combo", "Abort creating and discard"]) == "Abort creating and discard"):
                 # Abort editing: drop changes and go back to menu.
                 easygui.msgbox(
                     f"Creation cancelled. The combo '{newcombo.name}' was not added.", "New Combo - Combo Manager", "Back to Menu")
