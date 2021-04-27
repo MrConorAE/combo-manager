@@ -33,6 +33,17 @@ combos = [
           "Large fries": 2.00, "Smoothie": 2.00})
 ]
 
+# The Help & About text
+# This is what's displayed when you open Help on the main menu
+help = {
+    "Adding a combo to the menu": "To add a combo, click [Add Combo] on the main menu.\n\nIn the next box, type the name of the new combo to add, or press [Cancel] if you don't want to add a combo anymore.\n\nOnce you have entered a name, you'll be asked to enter the names and prices of each item in the combo. Type the name and price (don't include the dollar sign, that's added for you) for the item, then press [OK] to add it. Repeat until you have entered all the items, then press [Cancel] to finalise.\n\nAt this point, you'll be asked if you want to add the combo. Look over the combo displayed - this is what will be added - and press [Yes] if it's OK, or [No] if it isn't.\n\nIf you press [No], you'll be asked if you want to edit the combo and then be asked again ([Modify combo]) or just discard it entirely and go back to the main menu ([Abort creating and discard]).\n\nIf you press [Yes], the combo will be saved and you're done! Just press [Back to Menu] in the message box that appears to head back to the main menu.",
+    "Viewing all the combos on the menu": "To view all the combos currently saved, click [View All] on the main menu.\nA new window will open, displaying all of the combos.\n\nTo print the entire menu, including formatting, to the Python Shell for easy copying or printing, click [Print to Shell].\n\nWhen you are done viewing the combos, press [Back to Menu] to return to the main menu.",
+    "Editing a combo already on the menu": "To edit a combo, click [Edit Combo] on the main menu.\n\nA list of all the combos on the menu will be displayed - select the one you wish to edit and press [OK], or press [Cancel] if you don't want to edit anymore.\n\nWhen you have selected your combo, a window will open with the details of the combo filled in.\nIf you want to add more items, press [Cancel] to add 1 more item each time. Note that if you add a new item, any unsaved changes will be lost - so add all the blank items first, then fill them out to avoid retyping everything.\n\nTo delete an item, empty the field where the item name is displayed.\nIf you omit a name, the item will be skipped. If you omit a price, it will default to $0.\n\nWhen you are done editing, and you have made all the changes you want, press [OK].\nA new window will then appear, displaying the combo before your changes (under the heading 'BEFORE'), and after your changes ('AFTER'). If you want to keep the changes you have made, press [Yes] to save them. Otherwise, press [No].\n\nIf you press [No], you'll be asked if you want to edit the combo again ([Modify my changes]) or just discard your changes and go back to the main menu ([Abort editing and discard]).\n\nIf you press [Yes], the changes to the combo will be saved and you're done! Just press [Back to Menu] in the message box that appears to head back to the main menu.",
+    "Deleting a combo": "To delete a combo from the menu, click [Delete Combo] on the main menu.\n\nA list of all the combos on the menu will be displayed - select the one you wish to remove and press [OK], or press [Cancel] to go back to the main menu.\n\nAfter you select a combo to delete, you'll be asked if you are sure you want to delete the combo.\n\nIf you are sure, and want to delete it permanently, click [Yes, delete].\nIf you do not want to delete the combo, click [No, do not delete].\n\nOnce you have made a choice, a message box will be displayed informing you of the choice you made and if it was successful. Just click [Back to Menu] to return to the main menu.",
+    "Viewing help": "To view the help menu (like you are now), click [Help & About] on the main menu.\n\nA list of all the help topics available will be displayed. To view one, select it and click [OK]. To go back to the main menu, press [Cancel].\n\nOnce you have selected a topic, it will be displayed. To go back to the list of topics or the main menu, click [Back].",
+    "About Combo Manager": "Combo Manager\n\nDeveloped by Conor Eager.\n\nCopyright (c) Conor Eager, 2021. All rights reserved."
+}
+
 # FUNCTIONS
 
 
@@ -263,15 +274,19 @@ def deleteCombo(combos, pos):
         easygui.msgbox("The combo was not deleted.",
                        "Delete Combo - Combo Manager", "Back to Menu")
 
-# Print program information
+
+# Print program information & show welcome screen
 print("COMBO MANAGER")
 print("Copyright (c) Conor Eager, 2021. All rights reserved.")
+easygui.msgbox(
+    "Welcome to Combo Manager!\nCopyright (c) Conor Eager, 2021. All rights reserved.\nFor more help and information, click [Help & About] on the main menu.", "Welcome - Combo Manager", "Continue to Main Menu")
 # MAIN MENU
 while True:
     # List of options:
-    options = ["Add Combo", "View All", "Edit Combo", "Delete Combo", "Quit"]
+    options = ["Add Combo", "View All", "Edit Combo",
+               "Delete Combo", "Help & About", "Quit"]
     option = easygui.buttonbox(
-        "Welcome to Combo Manager!\n\nWhat would you like to do?", "Main Menu - Combo Manager", options)
+        "Welcome to Combo Manager!\n\nSelect an action below.\nFor help and information, click [Help & About].\nTo exit this program, click [Quit].", "Main Menu - Combo Manager", options)
     if (option == options[0]):
         # Add a combo to the list.
         addCombo()
@@ -295,6 +310,16 @@ while True:
         else:
             deleteCombo(combos, choice)
     elif (option == options[4]):
+        # Show help.
+        while True:
+            item = easygui.choicebox("Select a help topic and press OK to view it, or press Cancel to go back to the main menu.",
+                                     "Help & About - Combo Manager", list(help.keys()))
+            if (item == None):
+                # Cancel pressed - break to menu
+                break
+            else:
+                easygui.msgbox(help[item], item, "Back")
+    elif (option == options[5]):
         # Quit.
         if (easygui.ynbox("Are you sure you want to quit Combo Manager?", "Quit - Combo Manager", ["No, do not quit", "Yes, quit"]) == 0):
             # Yes, quit.
