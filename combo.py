@@ -75,8 +75,8 @@ def addCombo():
         # Error checking loop
         try:
             name = easygui.multenterbox(
-                "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (Step 1/3) - Combo Manager", ["Name:"])[0]
-            if name == "":
+                "Please enter the name for your new combo, or press Cancel to abort:", "New Combo (Step 1/3) - Combo Manager", ["Name:"])
+            if name == [""]:
                 # If result is empty:
                 easygui.msgbox(
                     "Error: combos must have names.", "New Combo - Combo Manager", "Try again")
