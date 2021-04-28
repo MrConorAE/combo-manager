@@ -85,6 +85,7 @@ def addCombo():
                 return
             else:
                 # If OK, break loop and continue
+                name = name[0]
                 break
         except:
             # If any other error:
